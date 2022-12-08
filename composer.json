@@ -1,0 +1,17 @@
+{
+    "name": "willemabc/deep-copy-debugger",
+    "description": "DeepCopy is powerful, but hard to debug. The DeepCopyDebugger makes it easier to spot incorrect or missing filters.",
+    "require": {
+        "myclabs/deep-copy": "^1.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Willemabc\\DeepCopyDebugger\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Willem van der Berg"
+        }
+    ]
+}
