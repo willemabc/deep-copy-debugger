@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DeepCopyDebugger;
+namespace Willemabc\DeepCopyDebugger;
 
 use Closure;
 use DeepCopy\DeepCopy;
@@ -28,6 +28,47 @@ class DeepCopyDebugger
     }
 
     /*
+     * Returns DeepCopy::filters in a more readable (flattened) format.
+     */
+    public function getFormattedFilterCollection(): array
+    {
+        $formattedFilterCollection = [];
+
+        $filterCollection = $this->getFilterCollection();
+        foreach ($filterCollection as $filter) {
+            $formattedFilter = [];
+
+            $formattedFilter['matcher'] = get_class($filter['matcher']);
+            switch (get_class($filter['matcher'])) {
+                case PropertyNameMatcher::class:
+                    $formattedFilter['matcherData'] = [
+                        'property' => $this->getPrivateProperty($filter['matcher'], 'property'),
+                    ];
+
+                    break;
+                case PropertyMatcher::class:
+                    $formattedFilter['matcherData'] = [
+                        'class' => $this->getPrivateProperty($filter['matcher'], 'class'),
+                        'property' => $this->getPrivateProperty($filter['matcher'], 'property'),
+                    ];
+
+                    break;
+                case PropertyTypeMatcher::class:
+                    $formattedFilter['matcherData'] = [
+                        'propertyType' => $this->getPrivateProperty($filter['matcher'], 'propertyType'),
+                    ];
+
+                    break;
+            }
+            $formattedFilter['filter'] = get_class($filter['filter']);
+
+            $formattedFilterCollection[] = $formattedFilter;
+        }
+
+        return $formattedFilterCollection;
+    }
+
+    /*
      * This method returns all DeepCopy filters applicable for each Dcotrine entity property.
      * Returns an array with the property as key, and the filter/filters in an array as value.
      * $entityClass is YourDoctrineEntity::class.
@@ -36,7 +77,7 @@ class DeepCopyDebugger
     {
         $matchedPropertyCollection = [];
         $propertyCollection = $this->getPropertyCollection($entityClass);
-        $formattedFilterCollection = $this->getFilterCollection();
+        $formattedFilterCollection = $this->getFormattedFilterCollection();
 
         foreach ($propertyCollection as $property) {
             $matchedPropertyCollection[$property] = [];

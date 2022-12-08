@@ -16,6 +16,7 @@ $deepCopy = new DeepCopy();
 
 $deepCopyDebugger = new DeepCopyDebugger($deepCopy);
 dump($deepCopyDebugger->getFilterCollection());
+dump($deepCopyDebugger->getFormattedFilterCollection());
 dump($deepCopyDebugger->getMatchedAndUnmatchedEntityProperties(YourDoctrineEntity::class));
 dump($deepCopyDebugger->getMatchedEntityProperties(YourDoctrineEntity::class));
 dump($deepCopyDebugger->getUnmatchedEntityProperties(YourDoctrineEntity::class));
